@@ -86,13 +86,13 @@ def MongoDataPagination(DB_MongoClient, database, collection, query=None, page=1
         #set page variables
         page,offset,max_page = set_pagination_vars(count,page,nPerPage)
         #Data
-        data = [row for row in db[database][collection].find(**query).skip(offset).limit(nPerPage)]
+        data = [row for row in db[database][collection].find(**query).sort([{"timestamp",-1}]).skip(offset).limit(nPerPage)]
     else:
         count = db[database][collection].find().count()
         #set page variables
         page,offset,max_page = set_pagination_vars(count,page,nPerPage)
         #Data
-        data = [row for row in db[database][collection].find().skip(offset).limit(nPerPage)]
+        data = [row for row in db[database][collection].find().skip(offset).sort([{"timestamp",-1}]).limit(nPerPage)]
     nexturi, previous=set_next_prev_urls(page,max_page,uri)
 
     result = {'count': count, 'meta': {'page': page, 'page_size': nPerPage, 'pages': int(max_page)}, 'next': nexturi,
